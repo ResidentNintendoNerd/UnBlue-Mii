@@ -72,17 +72,17 @@ void initialise_fat() {
 // From the Mii Data page on Wiibrew (converted to C, not by me obs)
 // Calculate CRC16 from a buffer of chars
 unsigned short crc16 (const unsigned char* bytes, unsigned int length) {
-    unsigned short crc = 0x0000;
-    for (unsigned int byteIndex = 0; byteIndex < length; byteIndex++) {
-        for (int bitIndex = 7; bitIndex >= 0; bitIndex--) {
-            crc = (((crc << 1) | ((bytes[byteIndex] >> bitIndex) & 0x1)) ^
-            (((crc & 0x8000) != 0) ? 0x1021 : 0)); 
-        }
-    }
-    for (int counter = 16; counter > 0; counter--) {
-        crc = ((crc << 1) ^ (((crc & 0x8000) != 0) ? 0x1021 : 0));
-    }
-    return crc;
+	unsigned short crc = 0x0000;
+	for (unsigned int byteIndex = 0; byteIndex < length; byteIndex++) {
+		for (int bitIndex = 7; bitIndex >= 0; bitIndex--) {
+			crc = (((crc << 1) | ((bytes[byteIndex] >> bitIndex) & 0x1)) ^
+			(((crc & 0x8000) != 0) ? 0x1021 : 0)); 
+		}
+	}
+	for (int counter = 16; counter > 0; counter--) {
+		crc = ((crc << 1) ^ (((crc & 0x8000) != 0) ? 0x1021 : 0));
+	}
+	return crc;
  }
 
 // Thank you other random discord user from Nintendo Homebrew
@@ -90,24 +90,24 @@ unsigned short crc16 (const unsigned char* bytes, unsigned int length) {
 unsigned char* alignPtr(unsigned char* p) { return (unsigned char*)(((uintptr_t)p + 31u) & ~31u); }
 
 int main(int argc, char **argv) {
-    init();
+	init();
 
 	ISFS_Initialize();
 	
 	initialise_fat();
 
-    Mii * miis;
+	Mii * miis;
 
 	miis = loadMiis_Wii();
 	
 	unsigned char ids[4] = {};
 	
-    printf("UnBlue Mii v1.0\n\n");
-    printf("Searching for saved System ID...\n\n");
+	printf("UnBlue Mii v1.0\n\n");
+	printf("Searching for saved System ID...\n\n");
 	sleep(3);
-    
+	
 	// Check if there is a .txt file present named "systemID.txt"
-    ifstream f("/apps/UnBlue Mii/systemID.txt", ios::binary);
+	ifstream f("/apps/UnBlue Mii/systemID.txt", ios::binary);
 	if (f) {
 		printf("Saved System ID found. Setting System ID for all Miis...\n\n");
 		sleep(3);
@@ -118,11 +118,11 @@ int main(int argc, char **argv) {
 		if (!f.good()) { f.close(); die("Unable to read from systemID.txt."); }
 	}
 	else {
-        printf("Saved System ID not found. Searching for Mii named \"UnBlue Mii\"...\n\n");
+		printf("Saved System ID not found. Searching for Mii named \"UnBlue Mii\"...\n\n");
 		sleep(3);
 		// Check if there's a Mii named "UnBlue Mii" and save it's system ID if present
-        for(int i=0; i<NoOfMiis; i++) {
-            if (strcmp("UnBlue Mii", miis[i].name) == 0) {
+		for(int i=0; i<NoOfMiis; i++) {
+			if (strcmp("UnBlue Mii", miis[i].name) == 0) {
 				printf("Mii found. Setting System ID...\n\n");
 				ids[0] = (unsigned char)miis[i].systemID0;
 				ids[1] = (unsigned char)miis[i].systemID1;
@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
 				ids[3] = (unsigned char)miis[i].systemID3;
 				sleep(2);
 				// Save System ID to file
-                printf("Saving System ID to file...\n\n");
+				printf("Saving System ID to file...\n\n");
 				ofstream sysID("/apps/UnBlue Mii/systemID.txt", ios::binary);
 				if (sysID.is_open()){
 					for (int j=0; j<4; j++) {
@@ -143,18 +143,18 @@ int main(int argc, char **argv) {
 					die("Unable to open file.\n");
 				}
 				sleep(3);
-            }
-        }
+			}
+		}
 		// If any ID variable is unchanged (Mii was not found), then abort program
-        if (ids[0] == 0 && ids[1] == 0 && ids[2] == 0 && ids[3] == 0) {
-            printf("Mii named \"UnBlue Mii\" not found! Please make one in the Mii Channel.\nPress HOME to exit.\n");
+		if (ids[0] == 0 && ids[1] == 0 && ids[2] == 0 && ids[3] == 0) {
+			printf("Mii named \"UnBlue Mii\" not found! Please make one in the Mii Channel.\nPress HOME to exit.\n");
 			while (true) {
 				WPAD_ScanPads();
 				u32 pressed = WPAD_ButtonsDown(0);
 				if (pressed & WPAD_BUTTON_HOME) {die("");}
 				VIDEO_WaitVSync();
 			}
-        }
+		}
 	}
 	f.close();
 	
@@ -222,16 +222,16 @@ int main(int argc, char **argv) {
 		die("Unexpected error! Did systemID.txt have less than four lines?");
 	}
 	
-    printf("\nAll done! Press HOME to exit.\n\n");
+	printf("\nAll done! Press HOME to exit.\n\n");
 	
-    while (true) {
-        WPAD_ScanPads();
-        u32 pressed = WPAD_ButtonsDown(0);
+	while (true) {
+		WPAD_ScanPads();
+		u32 pressed = WPAD_ButtonsDown(0);
 		
 		if (pressed & WPAD_BUTTON_HOME) {die("");}
 		
-        VIDEO_WaitVSync();
-    }
+		VIDEO_WaitVSync();
+	}
 
-    return 0;
+	return 0;
 }
