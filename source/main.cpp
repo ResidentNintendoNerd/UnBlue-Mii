@@ -219,7 +219,7 @@ int main(int argc, char **argv) {
 		ISFS_Close(miiDB);
 	}
 	else {
-		die("Unexpected error! Did systemID.txt have less than four lines?");
+		die("Unexpected error! Did you tamper with systemID.txt?");
 	}
 	
 	printf("\nAll done! Press HOME to exit.\n\n");
