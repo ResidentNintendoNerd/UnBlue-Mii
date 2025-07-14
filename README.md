@@ -1,4 +1,7 @@
 # UnBlue Mii
+
+NOTE: To work correctly on Dolphin, the virtual SD Card option must be enabled, and the "apps/UnBlue Mii" directory must exist in it.
+
 Simple program that edits the System IDs of all Miis to match your console's, thereby removing the write protection/blue pants from them.
 
 If this is your first time running the program, make a Mii named "Unblue Mii" in the Mii Channel first! 
